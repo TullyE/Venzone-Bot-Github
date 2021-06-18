@@ -3,7 +3,7 @@ from Token import * #import all vars from Token.py (in this case only Token)
 import asyncio, discord
 
 client = discord.Client()
-allowed_ids = {'3va':502253915463614477, 'Panda':635845590491725852} #, 'Cool Kid':744455901011902484}
+allowed_ids = {} #Add user ID's.. doing so allows their messages to not get purged
 del_msg = []
 
 async def send_msg_every_24hrs():
