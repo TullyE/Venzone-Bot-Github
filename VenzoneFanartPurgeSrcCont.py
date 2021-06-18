@@ -23,6 +23,8 @@ async def on_message(message):
 
     Channel = message.channel
     Author = message.author
+    Roles = discord.utils.get(Author.roles, name = 'Mods')
+    Mod = 'Mods' == str(Roles)
 
     if Channel == client.get_channel(835641585777639434): #If the message WAS sent in Fanart (The channel that's being purged)
         msg_id = await Channel.fetch_message(message.id)
@@ -31,9 +33,8 @@ async def on_message(message):
         if message.attachments or message.reference: #if it's a reply or an attachment >>>This is a boolean check<<<
             return
 
-        Roles = discord.utils.get(Author.roles, name = 'Mods')
-        Roles = str(Roles)
-        if Roles == 'Mods' or message.author == client.user: #if a mod types the message
+
+        if Mod or message.author == client.user: #if a mod types the message
             if message.content == '!Del':
                 for i in del_msg:
                     await del_msg_chan.send(f'"{i.content}" by {i.author} was deleted')
