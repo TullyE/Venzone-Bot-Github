@@ -1,5 +1,4 @@
 import discord 
-from Token import * #import all vars from Token.py (in this case only Token)
 import asyncio, discord
 import requests
 import bs4

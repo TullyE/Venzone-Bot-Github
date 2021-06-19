@@ -1,8 +1,10 @@
 import discord 
-from Token import *
 from discord.ext import commands
 from datetime import datetime
 import asyncio, discord
+import os
+from dotenv import load_dotenv
+load_dotenv() #take envirment variables from .env
 
 '''
 Code adapted from https://stackoverflow.com/questions/61366148/python-discord-py-bot-interval-message-send
@@ -28,4 +30,4 @@ async def on_ready():
     print('------')
     await my_background_task()
 
-client.run(Token)
+client.run(os.environ.get('DiscordToken'))
