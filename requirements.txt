@@ -2,9 +2,5 @@ discord.py==1.7.1
 asyncio==3.4.3
 bs4==0.0.1
 requests==2.25.1
-google-auth==1.29.0
-google-auth-oauthlib==0.4.4
-gspread==3.7.0
-numpy==1.19.2
 oauthlib==3.1.0
 python-dotenv==0.17.1
