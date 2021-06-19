@@ -1,10 +1,13 @@
 import discord 
 from Token import * #import all vars from Token.py (in this case only Token)
 import asyncio, discord
+import requests
+import bs4
 
 client = discord.Client()
 allowed_ids = {'Venbot':853822944510083083, 'Dino':740111453041983540, 'Venzai':707507650933555300} #Add user ID's.. doing so allows their messages to not get purged
 del_msg = []
+VenzaiStats = 'https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UCOF7ltHu8XbrRlEIjGho-YQ&key=AIzaSyBagDaydYGYDu-cjmbMyurOB9ORymLSZUs'
 
 async def send_msg_every_24hrs():
     fanart_chan = client.get_channel(775788393769992222) #THE INT CAN BE CHANED THATS THE CHANNEL ID
@@ -27,6 +30,13 @@ async def on_message(message):
             break
     if message.content == '/Youtube':
         await message.channel.send('https://www.youtube.com/venzai')       
+    
+    if message.content == '/Subs':
+        res = requests.get(VenzaiStats)
+        soup = str(bs4.BeautifulSoup(res.text, 'lxml'))
+        subcount = soup.split('"subscriberCount":')[1].split('"')[1]
+        await message.channel.send(f'Venzai has {subcount} subscribers!')
+
     if message.channel == client.get_channel(775788393769992222): #If the message WAS sent in Fanart (The channel that's being purged)
         msg_id = await message.channel.fetch_message(message.id)
         del_msg_chan = client.get_channel(855613510746243083) #Channel where deleted messages are sent
