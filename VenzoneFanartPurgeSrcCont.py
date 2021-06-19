@@ -3,6 +3,9 @@ from Token import * #import all vars from Token.py (in this case only Token)
 import asyncio, discord
 import requests
 import bs4
+import os
+from dotenv import load_dotenv
+load_dotenv() #take envirment variables from .env
 
 client = discord.Client()
 allowed_ids = {'Venbot':853822944510083083, 'Dino':740111453041983540, 'Venzai':707507650933555300} #Add user ID's.. doing so allows their messages to not get purged
@@ -70,4 +73,4 @@ async def on_message(message):
         del_msg.append(msg_id)
         return
 
-client.run(Token)
+client.run(os.environ.get('DiscordToken'))
