@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 load_dotenv() #take envirment variables from .env
 
 client = discord.Client()
-allowed_ids = {'Venbot':853822944510083083, 'Dino':740111453041983540, 'Venzai':707507650933555300, '3va':502253915463614477} #Add user ID's.. doing so allows their messages to not get purged
+allowed_ids = {'Dino':740111453041983540, 'Venzai':707507650933555300, '3va':502253915463614477} #Add user ID's.. doing so allows their messages to not get purged
 del_msg = []
 VenzaiStats = 'https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UCOF7ltHu8XbrRlEIjGho-YQ&key=AIzaSyBagDaydYGYDu-cjmbMyurOB9ORymLSZUs'
 
@@ -15,7 +15,7 @@ async def send_msg_every_24hrs():
     fanart_chan = client.get_channel(775788393769992222) #THE INT CAN BE CHANED THATS THE CHANNEL ID
     while True:
         await fanart_chan.send('/Del') #What you want to be sent 
-        await asyncio.sleep(15) #every x sec <<<86400>>> is the num of sec in 24hrs
+        await asyncio.sleep(86400) #every x sec <<<86400>>> is the num of sec in 24hrs
 
 @client.event
 async def on_ready():
@@ -39,10 +39,6 @@ async def on_message(message):
         subcount = soup.split('"subscriberCount":')[1].split('"')[1]
         await message.channel.send(f'Venzai has {subcount} subscribers!')
 
-    #if message.content == 'Test':
-    #    await message.channel.send('/Del')
-    #    await message.delete()
-
     if message.channel == client.get_channel(775788393769992222): #If the message WAS sent in Fanart (The channel that's being purged)
         msg_id = await message.channel.fetch_message(message.id)
         del_msg_chan = client.get_channel(855613510746243083) #Channel where deleted messages are sent
@@ -55,9 +51,7 @@ async def on_message(message):
                 embed = discord.Embed()
                 embed.title = f'{len(del_msg)} Messages have been deleted.'
                 embed.description = ''
-                #for i in del_msg:
-                #    await del_msg_chan.send(f'"{i.content}" by {i.author} was deleted') #Keeps track of all deleted messages and their original senders
-                #    await i.delete()
+
                 for i in del_msg:
                     embed.description += f'\nFrom {i.author}\n{i.content}\n'
                     await i.delete()
