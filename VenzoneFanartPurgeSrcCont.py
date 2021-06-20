@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 load_dotenv() #take envirment variables from .env
 
 client = discord.Client()
-allowed_ids = {'Venbot':853822944510083083, 'Dino':740111453041983540, 'Venzai':707507650933555300} #Add user ID's.. doing so allows their messages to not get purged
+allowed_ids = {'Venbot':853822944510083083, 'Dino':740111453041983540, 'Venzai':707507650933555300, '3va':502253915463614477} #Add user ID's.. doing so allows their messages to not get purged
 del_msg = []
 VenzaiStats = 'https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UCOF7ltHu8XbrRlEIjGho-YQ&key=AIzaSyBagDaydYGYDu-cjmbMyurOB9ORymLSZUs'
 
@@ -15,7 +15,7 @@ async def send_msg_every_24hrs():
     fanart_chan = client.get_channel(775788393769992222) #THE INT CAN BE CHANED THATS THE CHANNEL ID
     while True:
         await fanart_chan.send('/Del') #What you want to be sent 
-        await asyncio.sleep(86400) #every x sec <<<86400>>> is the num of sec in 24hrs
+        await asyncio.sleep(15) #every x sec <<<86400>>> is the num of sec in 24hrs
 
 @client.event
 async def on_ready():
@@ -38,6 +38,10 @@ async def on_message(message):
         soup = str(bs4.BeautifulSoup(res.text, 'lxml'))
         subcount = soup.split('"subscriberCount":')[1].split('"')[1]
         await message.channel.send(f'Venzai has {subcount} subscribers!')
+
+    #if message.content == 'Test':
+    #    await message.channel.send('/Del')
+    #    await message.delete()
 
     if message.channel == client.get_channel(775788393769992222): #If the message WAS sent in Fanart (The channel that's being purged)
         msg_id = await message.channel.fetch_message(message.id)
