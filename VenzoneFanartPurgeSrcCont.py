@@ -1,5 +1,5 @@
 import discord 
-import asyncio, discord
+import asyncio
 import requests
 import bs4
 import os
@@ -21,6 +21,14 @@ async def send_msg_every_24hrs():
 async def on_ready():
     print('We have logged in as {0.user}'.format(client))
     await send_msg_every_24hrs()
+
+@client.event
+async def on_message_delete(message):
+    if message.mentions:
+        embed = discord.Embed()
+        embed.title = 'From: ' + str(message.author.nick)
+        embed.description = message.content
+        await message.channel.send(embed = embed)
 
 @client.event
 async def on_message(message):
