@@ -26,7 +26,12 @@ async def on_ready():
 async def on_message_delete(message):
     if message.mentions:
         embed = discord.Embed()
-        embed.title = 'From: ' + str(message.author.nick)
+        name = ''
+        if message.author.nick:
+            name = str(message.author.nick)
+        else:
+            name = str(message.author)
+        embed.title = 'From: ' + name
         embed.description = message.content
         await message.channel.send(embed = embed)
 
