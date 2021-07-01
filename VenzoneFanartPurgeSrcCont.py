@@ -8,7 +8,7 @@ load_dotenv() #take envirment variables from .env
 
 client = discord.Client()
 allowed_ids = {'Dino':740111453041983540, 'Venzai':707507650933555300, '3va':502253915463614477} #Add user ID's.. doing so allows their messages to not get purged
-del_msg = []
+client.del_msg = []
 VenzaiStats = 'https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UCOF7ltHu8XbrRlEIjGho-YQ&key=AIzaSyBagDaydYGYDu-cjmbMyurOB9ORymLSZUs'
 
 async def send_msg_every_24hrs():
@@ -17,14 +17,34 @@ async def send_msg_every_24hrs():
         await fanart_chan.send('/Del') #What you want to be sent 
         await asyncio.sleep(86400) #every x sec <<<86400>>> is the num of sec in 24hrs
 
+async def clean(Author = '<@853822944510083083>'):
+    del_msg_chan = client.get_channel(855613510746243083) #Channel where deleted messages are sent
+    embed = discord.Embed()
+    embed.title = f'{len(client.del_msg)} Messages have been deleted.'
+    embed.description = ''
+    for i in client.del_msg:
+        embed.description += f'\nFrom {i.author}\n{i.content}\n'
+        await i.delete()
+    client.del_msg.clear()
+    try:
+        await del_msg_chan.send(embed = embed)
+    except:
+        embed = discord.Embed()
+        embed.title = f'{len(client.del_msg)} Messages have been deleted.'
+        embed.description = ''
+        await del_msg_chan.send(embed = embed)
+    await del_msg_chan.send(f'<#775788393769992222> has been purged by {Author}')
+
 @client.event
 async def on_ready():
     print('We have logged in as {0.user}'.format(client))
-    await send_msg_every_24hrs()
+    await clean()
+    await asyncio.sleep(60)
 
 @client.event
 async def on_message_delete(message):
     if message.mentions:
+        GhostPingChannel = client.get_channel(855613510746243083)
         embed = discord.Embed()
         name = ''
         if message.author.nick:
@@ -33,7 +53,7 @@ async def on_message_delete(message):
             name = str(message.author)
         embed.title = 'From: ' + name
         embed.description = message.content
-        await message.channel.send(embed = embed)
+        await GhostPingChannel.send(embed = embed)
 
 @client.event
 async def on_message(message):
@@ -61,26 +81,9 @@ async def on_message(message):
 
         if mod or message.author == client.user: #if a mod types the message
             if message.content == '/Del':
-                embed = discord.Embed()
-                embed.title = f'{len(del_msg)} Messages have been deleted.'
-                embed.description = ''
-
-                for i in del_msg:
-                    embed.description += f'\nFrom {i.author}\n{i.content}\n'
-                    await i.delete()
-                del_msg.clear()
-                await message.delete()
-                try:
-                    await del_msg_chan.send(embed = embed)
-                except:
-                    embed = discord.Embed()
-                    embed.title = f'{len(del_msg)} Messages have been deleted.'
-                    embed.description = ''
-                    await del_msg_chan.send(embed = embed)
-                await del_msg_chan.send(f'<#775788393769992222> has been purged by {message.author.mention}') #Alerts that the channel was cleaned even if nothing was deleted
-                return
+                await clean(message.author)
             return       
-        del_msg.append(msg_id)
+        client.del_msg.append(msg_id)
         return
 
 client.run(os.environ.get('DiscordToken'))
