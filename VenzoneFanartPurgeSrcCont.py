@@ -11,10 +11,10 @@ allowed_ids = {'Dino':740111453041983540, 'Venzai':707507650933555300, '3va':502
 client.del_msg = []
 VenzaiStats = 'https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UCOF7ltHu8XbrRlEIjGho-YQ&key=AIzaSyBagDaydYGYDu-cjmbMyurOB9ORymLSZUs'
 
-async def send_msg_every_24hrs():
+async def purge_every_24hrs():
     fanart_chan = client.get_channel(775788393769992222) #THE INT CAN BE CHANED THATS THE CHANNEL ID
     while True:
-        await fanart_chan.send('/Del') #What you want to be sent 
+        await clean()
         await asyncio.sleep(86400) #every x sec <<<86400>>> is the num of sec in 24hrs
 
 async def clean(Author = '<@853822944510083083>'):
@@ -38,8 +38,7 @@ async def clean(Author = '<@853822944510083083>'):
 @client.event
 async def on_ready():
     print('We have logged in as {0.user}'.format(client))
-    await clean()
-    await asyncio.sleep(60)
+    await purge_every_24hrs()
 
 @client.event
 async def on_message_delete(message):
